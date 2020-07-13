@@ -23,6 +23,11 @@ mongoose.connect("mongodb://localhost/blogapp").then(() => {
 });
 // ##### Public
 app.use(express.static(path.join(__dirname, "public"))); // Gets the absolute path to the directory "public"
+app.use((req, res, next) => {
+/*   //Isto é um middleware.
+  console.log("Middleare ativado");
+  next(); // Sem o next a aplicação pára.
+}); */
 // ########## Routes ##########
 app.get("/", (req, res) => {
   res.send("Rota principal");
