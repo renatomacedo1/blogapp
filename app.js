@@ -12,6 +12,9 @@ require("./models/Postagem");
 const Postagem = mongoose.model("postagens");
 require("./models/Categoria");
 const Categoria = mongoose.model("categorias");
+const {
+  allowInsecurePrototypeAccess
+} = require("@handlebars/allow-prototype-access");
 
 // ########## Configurations ##########
 // Session
@@ -34,7 +37,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 // ##### Handlebars
 app.engine("handlebars", handlebars({ defaultLayout: "main" }));
+
 app.set("view engine", "handlebars");
+
+/* app.engine(
+  "handlebars",
+  expressHandlebars({
+    handlebars: allowInsecurePrototypeAccess(Handlebars)
+  })
+); */
+
 // ##### Mongoose
 mongoose.Promise = global.Promise;
 mongoose.connect("mongodb://localhost/blogapp").then(() => {
@@ -104,7 +116,6 @@ app.get("/postagem/:slug", (req, res) => {
 
 app.get("/categorias", (req, res) => {
   Categoria.find()
-    .lean()
     .then(categorias => {
       res.render("categorias/index", { categorias: categorias });
     })
